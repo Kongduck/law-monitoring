@@ -11,12 +11,15 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "http://localhost:3001",
     methods: ["GET", "POST"]
   }
 });
 
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:3001",
+  credentials: true
+}));
 app.use(express.json());
 
 // 이메일 전송을 위한 설정
@@ -215,6 +218,11 @@ app.put('/api/law-amendments/:id', async (req, res) => {
   
   console.log('결재 처리 응답 데이터:', lawAmendments[index]);
   res.json(lawAmendments[index]);
+});
+
+// 기본 라우트 추가
+app.get('/', (req, res) => {
+  res.json({ message: '법률 모니터링 API 서버가 실행 중입니다.' });
 });
 
 // 서버 시작
